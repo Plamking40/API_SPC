@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const conn = require("../../DB/db");
+const jwt = require("jsonwebtoken");
 
 router.get("/", (req, res) => {
   const { id } = req.params;
@@ -28,10 +29,29 @@ router.get("/", (req, res) => {
   }
 });
 
+const jwtValidate = (req, res, next) => {
+  try {
+    if (!req.headers["authorization"]) return res.sendStatus(401);
+
+    const token = req.headers["authorization"].replace("Bearer ", "");
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) throw new Error(error);
+    });
+    next();
+  } catch (error) {
+    return res.sendStatus(403);
+  }
+};
+
 router.get("/case/:id", (req, res) => {
   const { id } = req.params;
-
+  const token = req.headers["authorization"].replace("Bearer ", "");
+  console.log(req.headers["authorization"].replace("Bearer ", ""));
   try {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) throw new Error(error);
+    });
     conn.query(
       `SELECT id,partition_rec,customer_id,status_id,received_date,branch,area_id,region_id,guaranty_type_id FROM tb_cases where id = ?`,
       [id],

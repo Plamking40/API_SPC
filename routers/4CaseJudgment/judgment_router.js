@@ -10,12 +10,16 @@ router.get("/case/:id", (req, res) => {
       `SELECT
       id,
       contract_number,
-      judgment_date_uton,
-      judgment_date_uton_action,
-      red_no_uton,
-      red_year_uton,
-      judgment_details_uton,
-      cases_note_judge_uton
+      judgment_date1,
+      red_no,
+      red_year,
+      judge_type,
+      fee_return,
+      judgment_details,
+      judgment_returncost,
+      sue_effective_date,
+      sue_effective_date2,
+      cases_note_judge
   FROM
       tb_cases
     WHERE
@@ -38,12 +42,16 @@ router.get("/case/:id", (req, res) => {
 router.patch("/update/case/:id", (req, res) => {
   const { id } = req.params;
   const {
-    judgment_date_uton,
-    judgment_date_uton_action,
-    red_no_uton,
-    red_year_uton,
-    judgment_details_uton,
-    cases_note_judge_uton,
+    judgment_date1,
+    red_no,
+    red_year,
+    judge_type,
+    fee_return,
+    judgment_details,
+    judgment_returncost,
+    sue_effective_date,
+    sue_effective_date2,
+    cases_note_judge,
   } = req.body;
 
   try {
@@ -51,21 +59,29 @@ router.patch("/update/case/:id", (req, res) => {
       `UPDATE
       tb_cases
         SET
-            judgment_date_uton=?,
-            judgment_date_uton_action=?,
-            red_no_uton=?,
-            red_year_uton=?,
-            judgment_details_uton=?,
-            cases_note_judge_uton=?
+          judgment_date1=?,
+          red_no=?,
+          red_year=?,
+          judge_type=?,
+          fee_return=?,
+          judgment_details=?,
+          judgment_returncost=?,
+          sue_effective_date=?,
+          sue_effective_date2=?,
+          cases_note_judge=?
         WHERE
-        id = ? `,
+          id = ? `,
       [
-        judgment_date_uton,
-        judgment_date_uton_action,
-        red_no_uton,
-        red_year_uton,
-        judgment_details_uton,
-        cases_note_judge_uton,
+        judgment_date1,
+        red_no,
+        red_year,
+        judge_type,
+        fee_return,
+        judgment_details,
+        judgment_returncost,
+        sue_effective_date,
+        sue_effective_date2,
+        cases_note_judge,
         id,
       ],
       (err, results, fields) => {
